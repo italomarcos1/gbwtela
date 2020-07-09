@@ -19,7 +19,65 @@ import { Container, Time } from './styles';
 const range = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 
 export default function Dashboard() {
-  const [schedule, setSchedule] = useState([]);
+  const [schedule, setSchedule] = useState([
+    {
+      past: false,
+      cancelable: true,
+      id: 8,
+      date: '2020-07-09T15:00:00.000Z',
+      canceled_at: null,
+      createdAt: '2020-07-09T10:30:46.286Z',
+      updatedAt: '2020-07-09T10:30:46.286Z',
+      user_id: 5,
+      provider_id: 5,
+      user: {
+        name: 'Italo Marcos',
+      },
+    },
+    {
+      past: false,
+      cancelable: true,
+      id: 5,
+      date: '2020-07-09T17:00:00.000Z',
+      canceled_at: null,
+      createdAt: '2020-07-09T10:30:38.677Z',
+      updatedAt: '2020-07-09T10:30:38.677Z',
+      user_id: 5,
+      provider_id: 5,
+      user: {
+        name: 'Cliente 2',
+      },
+    },
+    {
+      past: false,
+      cancelable: true,
+      id: 6,
+      date: '2020-07-09T18:00:00.000Z',
+      canceled_at: null,
+      createdAt: '2020-07-09T10:30:41.506Z',
+      updatedAt: '2020-07-09T10:30:41.506Z',
+      user_id: 5,
+      provider_id: 5,
+      user: {
+        name: 'Cliente 3',
+      },
+    },
+    {
+      past: false,
+      cancelable: true,
+      id: 7,
+      date: '2020-07-09T21:00:00.000Z',
+      canceled_at: null,
+      createdAt: '2020-07-09T10:30:44.141Z',
+      updatedAt: '2020-07-09T10:30:44.141Z',
+      user_id: 5,
+      provider_id: 5,
+      user: {
+        name: 'Teste',
+      },
+    },
+  ]);
+
   const [date, setDate] = useState(new Date());
 
   const dateFormatted = useMemo(
@@ -29,10 +87,6 @@ export default function Dashboard() {
 
   useEffect(() => {
     async function loadSchedule() {
-      const response = await api.get('schedule', {
-        params: { date },
-      });
-
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
       const data = range.map(hour => {
@@ -42,7 +96,7 @@ export default function Dashboard() {
         return {
           time: `${hour}:00h`,
           past: isBefore(compareDate, new Date()),
-          appointment: response.data.find(
+          appointment: schedule.find(
             a => parseISO(a.date).toString() === compareDate.toString()
           ),
         };
@@ -52,7 +106,7 @@ export default function Dashboard() {
     }
 
     loadSchedule();
-  }, [date]);
+  }, []); //eslint-disable-line
 
   function handlePrevDay() {
     setDate(subDays(date, 1));
